@@ -1,0 +1,23 @@
+Services
+
+aaa session-id common
+no service pad
+service timestamps debug datetime localtime msec show-timezone
+service timestamps log datetime localtime msec show-timezone
+service tcp-keepalives-in
+service tcp-keepalives-out
+service password-encryption
+service sequence-numbers
+service password-recovery
+no service tcp-small-servers
+no service udp-small-servers
+no service config
+no service compress-config
+ip tcp synwait-time 7
+no ip http server
+no ip http secure-server
+no ip finger
+no ip source-route
+no ip gratuitous-arps
+no ip identd
+ip dhcp bootp ignore

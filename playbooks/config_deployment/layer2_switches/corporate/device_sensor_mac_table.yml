@@ -1,0 +1,7 @@
+device-sensor accounting
+
+device-sensor notify all-changes
+
+mac address-table notification change
+
+mac address-table notification mac-move

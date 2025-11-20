@@ -1,0 +1,4 @@
+- name: IOS upgrade
+  hosts: access_switches
+  roles:
+    - upgrade_ios

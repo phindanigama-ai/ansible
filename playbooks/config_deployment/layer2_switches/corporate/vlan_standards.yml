@@ -1,0 +1,17 @@
+· VLAN 11: Infrastructure/Management
+
+· VLAN 12: Kiosk systems
+
+· VLAN 21: Back office systems
+
+· VLAN 22: Scanners
+
+· VLAN 31: Point-of-Sale terminals
+
+· VLAN 32: E-commerce systems
+
+· VLAN 41: IP Telephony
+
+· VLAN 42: Third-party systems
+
+· VLANs 101-109: Various specialized functions

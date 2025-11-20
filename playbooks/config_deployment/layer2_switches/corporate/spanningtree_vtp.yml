@@ -1,0 +1,23 @@
+vtp version 2
+
+vtp domain PNP
+
+vtp mode transparent
+
+udld enable
+
+spanning-tree mode rapid-pvst
+
+spanning-tree portfast bpduguard default
+
+spanning-tree extend system-id
+
+spanning-tree pathcost method long
+
+spanning-tree portfast default
+
+spanning-tree portfast bpduguard default
+
+spanning-tree etherchannel guard misconfig
+
+spanning-tree loopguard default
