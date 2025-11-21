@@ -6,7 +6,7 @@
   tasks:
 
     - name: Get running configuration
-    - ios_command:
+      ios_command:
         commands:
           - show running-config
       register: run_cfg
