@@ -1,0 +1,38 @@
+interface range GigabitEthernet xxx
+
+description !P_Link_to_<REMOTE_HOST_INTERFACE>
+
+switchport
+
+no spanning portfast
+
+switchport nonegotiate
+
+switchport trunk encapsulation dot1q
+
+switchport mode trunk
+
+switchport trunk allowed vlan <VLAN_PERMIT>
+
+mls qos trust cos
+
+auto qos trust
+
+udld port
+
+channel-group <ID> mode active
+
+
+interface Port-channel <ID>
+
+description !P_Link_to_<REMOTE_HOST_INTERFACE>
+
+switchport
+
+switchport nonegotiate
+
+switchport trunk encapsulation dot1q
+
+switchport mode trunk
+
+switchport trunk allowed vlan <VLAN_PERMIT

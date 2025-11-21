@@ -1,0 +1,35 @@
+ip access-list extended VTY-ACCESS
+
+permit tcp host 10.1.x.xany eq 22
+
+permit tcp host 10.2.x.x any eq 22
+
+permit tcp host 10.3.x.x any eq 22
+
+deny ip any any log
+
+
+ip access-list standard SNMP-IN
+
+permit 10.4.x.x
+
+permit 10.5.x.x
+
+permit 10.6.x.x
+
+deny any log
+
+
+ip access-list extended POS_VLAN
+
+remark ACQUIRER_NEW
+
+permit ip any host 10.7.x.x
+
+permit ip any host 10.8.x.x
+
+remark VASLB
+
+permit ip any host 10.9.x.x
+
+deny ip any any

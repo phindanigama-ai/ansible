@@ -1,0 +1,19 @@
+description !T_Link_to_<REMOTE_HOST_INTERFACE>
+
+switchport
+
+no spanning portfast
+
+switchport trunk encapsulation dot1q
+
+switchport mode trunk
+
+switchport trunk allowed vlan <VLAN_PERMIT>
+
+mls qos trust cos
+
+auto qos trust
+
+udld port
+
+switchport nonegotiate

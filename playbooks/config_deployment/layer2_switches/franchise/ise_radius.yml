@@ -1,0 +1,58 @@
+aaa authentication dot1x default group ISE-RADIUS
+
+aaa authorization network default group ISE-RADIUS
+
+aaa accounting update newinfo periodic 71582
+
+aaa accounting dot1x default start-stop group ISE-RADIUS
+
+radius-server deadtime 10
+
+radius-server dead-criteria time 5 tries 3
+
+aaa server radius dynamic-author
+
+client 10.1.x.x server-key xxxxx
+
+client 10.2.x.x server-key xxxxx
+
+
+dot1x system-auth-control
+
+ip radius source-interface Vlan11
+
+radius-server attribute 6 on-for-login-auth
+
+radius-server attribute 8 include-in-access-req
+
+radius-server attribute 25 access-request include
+
+radius-server vsa send authentication
+
+radius-server vsa send accounting
+
+
+radius server BREE_PSN1
+
+address ipv4 10.1.x.x auth-port 1812 acct-port 1813
+
+automate-tester username rad1 ignore-acct-port idle-time 120
+
+key xxxxx
+
+radius server RANDVIEW_PSN2
+
+address ipv4 10.2.x.x auth-port 1812 acct-port 1813
+
+automate-tester username rad2 ignore-acct-port idle-time 120
+
+key xxxxx
+
+
+aaa group server radius ISE-RADIUS
+
+server name BREE_PSN1
+
+server name RANDVIEW_PSN2
+
+deadtime 15

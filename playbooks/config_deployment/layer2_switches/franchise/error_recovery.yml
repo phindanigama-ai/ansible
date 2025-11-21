@@ -1,0 +1,25 @@
+errdisable recovery cause udld
+
+errdisable recovery cause bpduguard
+
+errdisable recovery cause channel-misconfig
+
+errdisable recovery cause loopback
+
+errdisable recovery cause link-flap
+
+errdisable recovery cause security-violation
+
+errdisable recovery cause dtp-flap
+
+errdisable recovery cause sfp-config-mismatch
+
+errdisable recovery cause gbic-invalid
+
+errdisable recovery cause storm-control
+
+errdisable recovery cause arp-inspection
+
+errdisable recovery interval 1800
+
+port-channel load-balance src-dst-ip

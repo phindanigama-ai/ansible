@@ -1,0 +1,41 @@
+aaa new-model
+
+tacacs server PNPTACACS_1
+
+address ipv4 10.x.x.x
+
+key 7 xxxxx
+
+tacacs server PNPTACACS_2
+
+address ipv4 10.x.x.x
+
+key 7 xxxxx
+
+
+aaa group server tacacs+ PNPTACACSGROUP
+
+server name PNPTACACS_1
+
+server name PNPTACACS_2
+
+ip tacacs source-interface Vlan11
+
+
+aaa authentication login default group TACACSGROUP local
+
+aaa authentication enable default group TACACSGROUP enable
+
+aaa authorization exec default group TACACSGROUP if-authenticated
+
+aaa authorization console
+
+aaa accounting exec default start-stop group TACACSGROUP
+
+aaa accounting commands 15 default start-stop group TACACSGROUP
+
+aaa accounting network default start-stop group TACACSGROUP
+
+aaa accounting connection default start-stop group TACACSGROUP
+
+aaa session-id common
