@@ -1,7 +1,7 @@
 ---
 - name: Collect configuration from Cisco switches
   hosts: cisco_switches
-  gather_facts: no
+  gather_facts: false
 
   tasks:
 
