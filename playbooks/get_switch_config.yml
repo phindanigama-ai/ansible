@@ -6,9 +6,8 @@
     - cisco.ios
 
   tasks:
-
     - name: Get running configuration
-      ios_command:
+      cisco.ios.ios_command:
         commands:
           - show running-config
       register: run_cfg
@@ -22,3 +21,4 @@
     - name: Display config in AWX output
       debug:
         msg: "{{ run_cfg.stdout[0] }}"
+
