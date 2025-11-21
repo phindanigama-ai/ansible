@@ -1,24 +1,94 @@
 ---
-- name: Collect configuration from Cisco switches
+- name: Cisco Switch Configuration SOE Audit
   hosts: cisco_switches
   gather_facts: false
-  collections:
-    - cisco.ios
-
+  serial: 15
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    soe_config_file: "soe_config.txt"
+    
   tasks:
-    - name: Get running configuration
-      cisco.ios.ios_command:
-        commands:
-          - show running-config
-      register: run_cfg
-
-    - name: Save running-config to file
-      copy:
-        content: "{{ run_cfg.stdout[0] }}"
-        dest: "backup_configs/{{ inventory_hostname }}_running_config.txt"
+    - name: Create output directories
       delegate_to: localhost
-
-    - name: Display config in AWX output
-      debug:
-        msg: "{{ run_cfg.stdout[0] }}"
-
+      run_once: true
+      block:
+        - name: Set batch ID
+          set_fact:
+            batch_id: "{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}"
+          
+        - name: Create directory structure
+          file:
+            path: "{{ item }}"
+            state: directory
+            mode: '0755'
+          loop:
+            - "audit_results"
+            - "audit_results/{{ batch_id }}"
+            - "audit_results/{{ batch_id }}/configs"
+            - "audit_results/{{ batch_id }}/individual_reports"
+            - "audit_results/{{ batch_id }}/batch_results"
+            - "audit_results/failed_hosts"
+            
+        - name: Save batch ID to file
+          copy:
+            content: "{{ batch_id }}"
+            dest: "./current_batch_id.txt"
+            
+        - name: Display batch info
+          debug:
+            msg: "Starting audit batch: {{ batch_id }}"
+    
+    - name: Load batch ID
+      set_fact:
+        batch_id: "{{ lookup('file', './current_batch_id.txt') }}"
+        output_dir: "audit_results/{{ lookup('file', './current_batch_id.txt') }}"
+    
+    - name: Gather switch configuration
+      block:
+        - name: Collect show running-config
+          ios_command:
+            commands:
+              - show running-config
+          register: config_output
+          timeout: 10
+          retries: 1
+          delay: 2
+          until: config_output is not failed
+          
+        - name: Collect switch information
+          ios_command:
+            commands:
+              - show version
+              - show inventory
+          register: device_info
+          ignore_errors: true
+          
+        - name: Save raw configuration locally
+          delegate_to: localhost
+          copy:
+            content: "{{ config_output.stdout[0] }}"
+            dest: "{{ output_dir }}/configs/{{ inventory_hostname }}_{{ ansible_host }}.cfg"
+            
+        - name: Process configuration compliance
+          delegate_to: localhost
+          config_compliance_check:
+            switch_config: "{{ config_output.stdout[0] }}"
+            soe_config_file: "{{ soe_config_file }}"
+            device_info: "{{ device_info.stdout | default([]) }}"
+            hostname: "{{ inventory_hostname }}"
+            ip_address: "{{ ansible_host }}"
+          register: compliance_result
+          
+        - name: Save individual switch report
+          delegate_to: localhost
+          copy:
+            content: "{{ compliance_result | to_json }}"
+            dest: "{{ output_dir }}/individual_reports/{{ inventory_hostname }}_report.json"
+            
+      rescue:
+        - name: Log failed host
+          delegate_to: localhost
+          lineinfile:
+            path: "audit_results/failed_hosts/{{ batch_id }}_failed.txt"
+            line: "{{ ansible_host }},{{ inventory_hostname }},{{ ansible_failed_result.msg | default('Connection failed') }}"
+            create: yes
