@@ -49,3 +49,35 @@ dot1x timeout tx-period 10
 authentication periodic
 
 authentication timer reauthenticate server
+
+!
+interface range X-Y
+ switchport mode access
+ switchport access vlan JJJ
+ switchport voice vlan KKK
+ description LLL
+ mls qos trust cos
+ auto qos trust
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ snmp trap mac-notification change added
+ snmp trap mac-notification change removed
+!MAB Radius config for new stores and stores that have been cutover  
+ authentication port-control auto
+ authentication event fail action next-method
+ authentication event server dead action authorize vlan JJJ
+ authentication event server dead action authorize voice
+ authentication event server alive action reinitialize
+ authentication host-mode multi-domain
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication violation restrict
+ mab
+ dot1x pae authenticator
+ dot1x timeout tx-period 10
+ dot1x pae authenticator
+ dot1x timeout tx-period 10
+ authentication periodic
+ authentication timer reauthenticate server
+ !
