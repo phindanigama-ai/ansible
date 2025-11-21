@@ -1,0 +1,25 @@
+---
+- name: Get running configuration from Cisco switches
+  hosts: cisco_switches
+  gather_facts: false
+  connection: network_cli
+
+  vars:
+    ansible_network_os: cisco.ios.ios
+    ansible_connection: network_cli
+
+  tasks:
+
+    - name: Ensure device is reachable
+      ansible.builtin.ping:
+
+    - name: Gather running configuration
+      cisco.ios.ios_command:
+        commands:
+          - show running-config
+      register: run_cfg
+
+    - name: Save configuration to file
+      ansible.builtin.copy:
+        content: "{{ run_cfg.stdout[0] }}"
+        dest: "configs/{{ inventory_hostname }}-running-config.txt"
