@@ -4,7 +4,6 @@
   gather_facts: false
 
   tasks:
-
     - name: Get running configuration
       ios_command:
         commands:
