@@ -1,0 +1,97 @@
+
+##################
+%
+
+!
+aaa session-id common
+no service pad
+service timestamps debug datetime localtime msec show-timezone
+service timestamps log datetime localtime msec show-timezone
+service tcp-keepalives-in
+service tcp-keepalives-out
+service password-encryption
+service sequence-numbers
+service password-recovery
+no service  tcp-small-servers
+no service udp-small-servers
+no service config
+no service compress-config
+ip tcp synwait-time 7
+no ip http server
+no ip http secure-server
+no ip finger
+no ip source-route
+no ip gratuitous-arps
+no ip identd
+ip dhcp bootp ignore
+aaa new-model
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 16000
+logging console errors
+enable secret GGG
+!
+!
+tacacs server PNPTACACS_1
+ address ipv4 10.96.1.153
+ key 7 051D31013879195B05221954452D0C070C
+tacacs server PNPTACACS_2
+ address ipv4 10.97.1.153
+ key 7 051D31013879195B05221954452D0C070C
+
+aaa group server tacacs+ PNPTACACSGROUP
+ server name PNPTACACS_1
+ server name PNPTACACS_2
+ ip tacacs source-interface Vlan11
+
+aaa new-model
+aaa authentication login default group PNPTACACSGROUP local
+aaa authentication enable default group PNPTACACSGROUP enable
+aaa authorization exec default group PNPTACACSGROUP if-authenticated
+aaa authorization console
+aaa accounting exec default start-stop group PNPTACACSGROUP
+aaa accounting commands 15 default start-stop group PNPTACACSGROUP
+aaa accounting network default start-stop group PNPTACACSGROUP
+aaa accounting connection default start-stop group PNPTACACSGROUP
+aaa session-id common
+
+aaa authentication dot1x default group ISE-RADIUS
+aaa authorization network default group ISE-RADIUS
+aaa accounting update newinfo periodic 71582
+aaa accounting dot1x default start-stop group ISE-RADIUS
+radius-server deadtime 10
+radius-server dead-criteria time 5 tries 3
+aaa server radius dynamic-author
+ client 10.96.1.152 server-key Pennywise@123
+ client 10.97.1.152 server-key Pennywise@123
+!
+!
+dot1x system-auth-control
+source vlan to be infrastructure vlan
+ip radius source-interface Vlan11
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server deadtime 10
+radius-server dead-criteria time 5 tries 3
+!
+radius-server vsa send authentication
+radius-server vsa send accounting
+!
+!
+radius server BREE_PSN1
+    address ipv4 10.96.1.152 auth-port 1812 acct-port 1813
+    automate-tester username rad1 ignore-acct-port idle-time 120
+    key Pennywise@123
+radius server RANDVIEW_PSN2
+    address ipv4 10.97.1.152 auth-port 1812 acct-port 1813
+    automate-tester username rad2 ignore-acct-port idle-time 120
+    key Pennywise@123
+aaa group server radius ISE-RADIUS
+ !Servers will be accessed based on the order here
+    server name BREE_PSN1
+    server name RANDVIEW_PSN2
+    deadtime 15
+!

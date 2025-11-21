@@ -5,3 +5,16 @@ ip ssh authentication-retries 3
 ip ssh time-out 60
 
 ip ssh version 2
+###########################
+%
+
+!
+crypto key generate rsa modulus 2048
+!
+!
+ip ssh authentication-retries 3
+ip ssh time-out 60
+ip ssh version 2
+lldp run
+cdp run
+!

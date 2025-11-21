@@ -21,3 +21,4 @@ no ip source-route
 no ip gratuitous-arps
 no ip identd
 ip dhcp bootp ignore
+! 

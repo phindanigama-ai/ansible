@@ -1,7 +1,6 @@
 ntp source Vlan11
-
 logging source-interface Vlan11
-
 ip radius source-interface Vlan11
-
 logging trap notifications
+! 
+######################################

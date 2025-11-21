@@ -1,17 +1,24 @@
-snmp-server enable traps
-
-snmp-server community SNMP_ACC1 SNMP-IN
-
-snmp-server community SNMP_ACC1 RW SNMP-IN
-
+!
+snmp-server enable traps 
+snmp-server community SPPnP_RO RO SNMP-IN
+snmp-server community SPPnP_RW RW SNMP-IN
 snmp-server trap-source Vlan11
-
+snmp-server enable traps
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart 
+snmp-server enable traps cluster 
+snmp-server enable traps cpu threshold 
+snmp-server enable traps auth-framework sec-violation 
+snmp-server enable traps envmon fan shutdown supply temperature status 
+snmp-server enable traps config-copy 
+snmp-server enable traps config
 snmp-server view nms-view 1.3.6.1.2.1 included
-
 snmp-server view nms-view 1.3.6.1.4.1.9 included
-
 snmp-server group nms-group v3 priv read nms-view
-
-snmp-server user snmpv3_user nms-group v3 auth sha xxxxx priv aes 128 xxxxx access SNMP-IN
-
-snmp-server host 10.x.x.x traps version 3 priv snmpv3_user
+snmp-server user LogikMonitor-snmpv3 nms-group v3 auth sha z71l5qoj9O1bT2 priv aes 128 B0i55gPPpQWv access SNMP-IN
+snmp-server host 10.96.133.18 traps version 3 priv LogikMonitor-snmpv3
+snmp-server community NTTAutomat1on RW NTT-SNMP-IN
+!
+!
+%
+###
+%

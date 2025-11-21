@@ -1,5 +1,8 @@
-logging buffered 16000
-
-logging console errors
-
-logging host 10.x.x.x
+!
+logging trap notifications
+logging source-interface Vlan11
+logging host 10.1.9.202
+!
+%
+###
+%
